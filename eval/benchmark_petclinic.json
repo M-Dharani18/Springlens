@@ -1,0 +1,421 @@
+[
+  {
+    "id": "PETCLINIC_Q01",
+    "category": "Type1_SingleComponent",
+    "question": "How are validation errors handled when adding or updating a pet in PetClinic?",
+    "ground_truth_answer": "Validation errors during pet creation/updating are handled by PetValidator.java, which implements Spring's org.springframework.validation.Validator interface. The validate method checks if the pet name is populated and if a pet type is selected. In PetController, @InitBinder(\"pet\") binds PetValidator to the WebDataBinder. When @Valid is triggered on a Pet form submission, BindingResult collects validation errors and returns the pet form view ('pets/createOrUpdatePetForm') if errors exist.",
+    "expected_entities": [
+      "PetValidator",
+      "PetController",
+      "Validator",
+      "WebDataBinder",
+      "@InitBinder",
+      "BindingResult",
+      "@Valid",
+      "validate"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q02",
+    "category": "Type1_SingleComponent",
+    "question": "What is the responsibility of OwnerController and what endpoints does it expose?",
+    "ground_truth_answer": "OwnerController is a Spring MVC @Controller managing HTTP requests for Owner entities. It exposes GET /owners/new for creation form, POST /owners/new for saving owners, GET /owners/find for search view, GET /owners for listing matching owners, GET /owners/{ownerId} for viewing owner details with pets/visits, and GET/POST /owners/{ownerId}/edit for updates.",
+    "expected_entities": [
+      "OwnerController",
+      "@Controller",
+      "@GetMapping",
+      "@PostMapping",
+      "OwnerRepository",
+      "processCreationForm",
+      "processFindForm",
+      "showOwner"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q03",
+    "category": "Type1_SingleComponent",
+    "question": "What role does VetRepository play in the application?",
+    "ground_truth_answer": "VetRepository is a Spring Data JPA repository interface annotated with @Repository or extending Repository/CrudRepository. It abstracts data access for Vet entities and their associated Specialties, providing methods like findAll() to fetch veterinarians along with their specialties for display on the vet list page.",
+    "expected_entities": [
+      "VetRepository",
+      "Vet",
+      "Specialty",
+      "@Repository",
+      "findAll",
+      "JpaRepository"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q04",
+    "category": "Type1_SingleComponent",
+    "question": "How is the Visit entity structured and related to Pet?",
+    "ground_truth_answer": "Visit is a JPA @Entity representing a pet's medical appointment with attributes like date, description, and pet_id. It maintains a @ManyToOne relationship with Pet entity. Pet holds a @OneToMany or set of Visit objects.",
+    "expected_entities": [
+      "Visit",
+      "Pet",
+      "@Entity",
+      "@ManyToOne",
+      "@OneToMany",
+      "date",
+      "description"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q05",
+    "category": "Type1_SingleComponent",
+    "question": "What is the purpose of ClinicService or equivalent service facade if present?",
+    "ground_truth_answer": "ClinicService acts as a central business logic facade interface annotated with @Service, encapsulating operations across Owner, Pet, Vet, and Visit repositories to isolate Web controllers from direct data repository dependencies.",
+    "expected_entities": [
+      "ClinicService",
+      "OwnerRepository",
+      "PetRepository",
+      "VetRepository",
+      "@Service",
+      "@Transactional"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q06",
+    "category": "Type1_SingleComponent",
+    "question": "How is pet type formatting handled in PetTypeFormatter?",
+    "ground_truth_answer": "PetTypeFormatter implements Spring's Formatter<PetType> interface. Its parse method converts string inputs from HTML select dropdowns into PetType objects by looking up types via OwnerRepository/PetRepository, and print formats PetType names to strings.",
+    "expected_entities": [
+      "PetTypeFormatter",
+      "Formatter",
+      "PetType",
+      "parse",
+      "print",
+      "OwnerRepository"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q07",
+    "category": "Type1_SingleComponent",
+    "question": "How are specialty entities modeled for veterinarians?",
+    "ground_truth_answer": "Specialty extends NamedEntity as a JPA @Entity representing a vet's domain specialty (e.g. radiology, surgery, dentistry). Vet maintains a @ManyToMany relationship with Specialty via a vet_specialties join table.",
+    "expected_entities": [
+      "Specialty",
+      "Vet",
+      "NamedEntity",
+      "@Entity",
+      "@ManyToMany",
+      "@JoinTable"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q08",
+    "category": "Type1_SingleComponent",
+    "question": "What base entity classes exist to avoid code duplication across domain models?",
+    "ground_truth_answer": "BaseEntity is a @MappedSuperclass containing an Integer id field acting as the primary key. NamedEntity extends BaseEntity adding a String name field. Domain entities like Owner, Pet, Vet, and Specialty inherit from these base classes.",
+    "expected_entities": [
+      "BaseEntity",
+      "NamedEntity",
+      "@MappedSuperclass",
+      "@Id",
+      "@GeneratedValue",
+      "id",
+      "name"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q09",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace the execution flow when an end-user submits a new Visit form for a Pet.",
+    "ground_truth_answer": "1. User submits POST request to /owners/{ownerId}/pets/{petId}/visits/new handled by VisitController.processNewVisitForm(). 2. Spring MVC binds HTTP form payload to Visit domain object and invokes PetRepository/OwnerRepository to resolve Pet entity. 3. VisitController validates input payload. 4. OwnerRepository/VisitRepository saves the Visit entity via JPA. 5. Controller redirects to /owners/{ownerId}.",
+    "expected_entities": [
+      "VisitController",
+      "Visit",
+      "Pet",
+      "OwnerRepository",
+      "VisitRepository",
+      "processNewVisitForm",
+      "@PostMapping",
+      "save"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q10",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Explain how searching for an owner by last name works across web, service/repository, and database layers.",
+    "ground_truth_answer": "1. GET request with search query parameters arrives at OwnerController.processFindForm(). 2. If lastName is null/empty, controller retrieves all owners via ownerRepository.findByLastName(\"\"). 3. If exact/partial match is found, ownerRepository executes JPA query 'SELECT o FROM Owner o WHERE o.lastName LIKE :lastName%'. 4. If single owner returned, controller redirects to /owners/{ownerId}. If multiple returned, renders 'owners/ownersList'.",
+    "expected_entities": [
+      "OwnerController",
+      "OwnerRepository",
+      "Owner",
+      "processFindForm",
+      "findByLastName",
+      "@GetMapping"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q11",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace how pet types are populated for the select dropdown during pet creation.",
+    "ground_truth_answer": "1. GET /owners/{ownerId}/pets/new invokes PetController.populatePetTypes(). 2. Method annotated with @ModelAttribute(\"types\") calls ownerRepository.findPetTypes(). 3. Repository executes JPA query to fetch all PetType records. 4. Collection of PetType objects is stored in Spring Model map and rendered in HTML template via PetTypeFormatter.",
+    "expected_entities": [
+      "PetController",
+      "@ModelAttribute",
+      "populatePetTypes",
+      "OwnerRepository",
+      "findPetTypes",
+      "PetTypeFormatter",
+      "PetType"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q12",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace the update flow when an existing owner's address is modified and saved.",
+    "ground_truth_answer": "1. POST request to /owners/{ownerId}/edit arrives at OwnerController.processUpdateOwnerForm(). 2. @Valid validates fields (address, city, telephone). 3. If BindingResult has errors, form is re-rendered. 4. If valid, owner.setId(ownerId) is ensured and ownerRepository.save(owner) updates database row. 5. HTTP redirect sent to GET /owners/{ownerId}.",
+    "expected_entities": [
+      "OwnerController",
+      "OwnerRepository",
+      "Owner",
+      "processUpdateOwnerForm",
+      "BindingResult",
+      "@Valid",
+      "save"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q13",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace how the vet list JSON/HTML response is generated when requesting /vets.",
+    "ground_truth_answer": "1. Request to /vets or /vets.html is handled by VetController.showVetList(). 2. VetController invokes vetRepository.findAll() to fetch Vet entities with specialties. 3. List wrapped in Vets object. 4. View resolver converts Vets object into JSON or populates Spring Model for Thymeleaf/HTML template rendering.",
+    "expected_entities": [
+      "VetController",
+      "VetRepository",
+      "Vets",
+      "Vet",
+      "showVetList",
+      "findAll",
+      "@GetMapping"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q14",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace how custom web data binding is configured for Pet model objects.",
+    "ground_truth_answer": "1. Request targeting PetController executes @InitBinder method initPetBinder(WebDataBinder dataBinder). 2. Controller registers PetValidator and custom property editors/formatters (e.g. PetTypeFormatter). 3. Disallows 'id' field binding via dataBinder.setDisallowedFields(\"id\"). 4. Prevents client payload from overriding existing entity primary key.",
+    "expected_entities": [
+      "PetController",
+      "@InitBinder",
+      "WebDataBinder",
+      "PetValidator",
+      "setDisallowedFields",
+      "initPetBinder"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q15",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace how database transactions are managed across multi-step entity persistence operations.",
+    "ground_truth_answer": "1. Transaction boundaries are managed via Spring's @Transactional annotation on service methods or repository interfaces. 2. TransactionInterceptor creates JPA EntityTransaction upon method entry. 3. Persistence context tracks changes. 4. Upon successful return, transaction commits; on unhandled RuntimeException, transaction rolls back automatically.",
+    "expected_entities": [
+      "@Transactional",
+      "TransactionInterceptor",
+      "EntityManager",
+      "ClinicService",
+      "OwnerRepository"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q16",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace how welcome and error HTTP requests are handled by Spring MVC controllers.",
+    "ground_truth_answer": "1. GET / is handled by WelcomeController returning 'welcome' view name. 2. Uncaught exceptions trigger Spring Boot's BasicErrorController or custom @ControllerAdvice error handler. 3. Error attributes mapped to error template rendering HTTP status 500 or 404.",
+    "expected_entities": [
+      "WelcomeController",
+      "BasicErrorController",
+      "@ControllerAdvice",
+      "@GetMapping",
+      "welcome"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q17",
+    "category": "Type3_DesignPattern",
+    "question": "How is the Repository Pattern realized across PetClinic's domain entities?",
+    "ground_truth_answer": "PetClinic implements the Repository Pattern via Spring Data JPA interfaces (OwnerRepository, VetRepository, VisitRepository). Instead of raw JDBC/SQL, data access is abstracted behind interfaces extending Repository or JpaRepository. Method signatures like findByLastName use Spring Data query generation.",
+    "expected_entities": [
+      "OwnerRepository",
+      "VetRepository",
+      "VisitRepository",
+      "JpaRepository",
+      "Repository",
+      "Spring Data JPA"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q18",
+    "category": "Type3_DesignPattern",
+    "question": "How is Dependency Injection (DI) implemented in PetClinic controllers?",
+    "ground_truth_answer": "Controllers use Constructor Injection rather than field injection. For example, OwnerController accepts OwnerRepository as a constructor parameter. Spring automatically autowires the required bean, promoting immutability (final fields) and ease of unit testing with mocks.",
+    "expected_entities": [
+      "OwnerController",
+      "OwnerRepository",
+      "Constructor Injection",
+      "@Autowired",
+      "final"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q19",
+    "category": "Type3_DesignPattern",
+    "question": "How is the MVC (Model-View-Controller) architectural pattern structured in the project?",
+    "ground_truth_answer": "MVC is split into: Controllers (@Controller classes handling HTTP endpoints and request mapping), Models (JPA @Entity domain classes like Owner, Pet, Vet and Spring Model maps), and Views (Thymeleaf templates under src/main/resources/templates).",
+    "expected_entities": [
+      "@Controller",
+      "Model",
+      "Thymeleaf",
+      "OwnerController",
+      "Owner",
+      "Pet",
+      "Vet"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q20",
+    "category": "Type3_DesignPattern",
+    "question": "How is the Validator design pattern implemented for domain model validation?",
+    "ground_truth_answer": "The Validator pattern is realized via org.springframework.validation.Validator interface implementations like PetValidator. It decouples domain-specific validation logic (checking name/type presence) from HTTP controllers and domain entities.",
+    "expected_entities": [
+      "Validator",
+      "PetValidator",
+      "supports",
+      "validate",
+      "Errors",
+      "BindingResult"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q21",
+    "category": "Type3_DesignPattern",
+    "question": "How is the Data Transfer Object (DTO) or Form Object pattern used in request payloads?",
+    "ground_truth_answer": "Form backing objects (e.g. PetForm or domain entities acting as DTOs) decouple incoming HTTP form parameters from persistence entities, allowing partial attribute binding and validation before persistence.",
+    "expected_entities": [
+      "Pet",
+      "Visit",
+      "Owner",
+      "BindingResult",
+      "@Valid",
+      "@ModelAttribute"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q22",
+    "category": "Type3_DesignPattern",
+    "question": "How is the Inheritance / MappedSuperclass pattern applied across JPA domain entities?",
+    "ground_truth_answer": "Domain entities inherit common primary key (id) and naming fields from BaseEntity and NamedEntity using JPA @MappedSuperclass. This avoids repeating @Id, @GeneratedValue, and property getter/setters across Owner, Pet, Vet, and Specialty.",
+    "expected_entities": [
+      "BaseEntity",
+      "NamedEntity",
+      "@MappedSuperclass",
+      "@Id",
+      "@GeneratedValue"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q23",
+    "category": "Type3_DesignPattern",
+    "question": "How is the Cache Abstraction pattern implemented for veterinarian lists?",
+    "ground_truth_answer": "Vet lists are cached using Spring's Cache Abstraction (@Cacheable(\"vets\")). Annotated on VetRepository or ClinicService.findAll(), subsequent requests for vet lists hit the cache (Caffeine/EhCache) rather than executing SQL queries.",
+    "expected_entities": [
+      "@Cacheable",
+      "VetRepository",
+      "findAll",
+      "CacheManager",
+      "Caffeine"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q24",
+    "category": "Type3_DesignPattern",
+    "question": "How is the Front Controller pattern implemented in the web layer?",
+    "ground_truth_answer": "Spring MVC's DispatcherServlet acts as the Front Controller, intercepting all HTTP requests, routing them to appropriate handler methods in @Controller classes via HandlerMapping, and resolving views via ViewResolver.",
+    "expected_entities": [
+      "DispatcherServlet",
+      "HandlerMapping",
+      "ViewResolver",
+      "@Controller",
+      "@GetMapping"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q25",
+    "category": "Type4_ConfigWiring",
+    "question": "How is Spring Caching configured and activated in PetClinic?",
+    "ground_truth_answer": "Caching is activated via @EnableCaching on a @Configuration class (e.g., CacheConfiguration.java). It defines CacheManager beans (such as CaffeineCacheManager or ConcurrentMapCacheManager) to back @Cacheable annotations.",
+    "expected_entities": [
+      "@EnableCaching",
+      "@Configuration",
+      "CacheManager",
+      "CaffeineCacheManager",
+      "@Cacheable"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q26",
+    "category": "Type4_ConfigWiring",
+    "question": "How are database datasources and JPA Hibernate properties configured?",
+    "ground_truth_answer": "Datasource properties (URL, username, password, driver) and JPA Hibernate settings (ddl-auto, dialect, show-sql) are configured in application.properties / application.yml or environment-specific profiles (application-postgres.properties, application-h2.properties).",
+    "expected_entities": [
+      "application.properties",
+      "spring.datasource.url",
+      "spring.jpa.hibernate.ddl-auto",
+      "DataSource",
+      "EntityManagerFactory"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q27",
+    "category": "Type4_ConfigWiring",
+    "question": "How are Spring Profiles used to switch between in-memory (H2) and persistent (PostgreSQL/MySQL) databases?",
+    "ground_truth_answer": "Spring Profiles (@Profile(\"h2\") vs @Profile(\"postgres\")) configure different database drivers, dialects, and schema initialization scripts (schema.sql, data.sql) allowing seamless switching between local dev and production database environments.",
+    "expected_entities": [
+      "@Profile",
+      "spring.profiles.active",
+      "schema.sql",
+      "data.sql",
+      "application-h2.properties",
+      "application-postgres.properties"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q28",
+    "category": "Type4_ConfigWiring",
+    "question": "How is static web asset routing (CSS, JS, WebJars) configured in Spring Boot?",
+    "ground_truth_answer": "Static assets under src/main/resources/static (CSS, images, Bootstrap, WebJars) are automatically served by Spring Boot's WebMvcAutoConfiguration without requiring explicit custom controller mappings.",
+    "expected_entities": [
+      "WebMvcAutoConfiguration",
+      "resources/static",
+      "WebJars",
+      "Bootstrap",
+      "css"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q29",
+    "category": "Type4_ConfigWiring",
+    "question": "How are Spring Boot Actuator monitoring endpoints enabled and configured?",
+    "ground_truth_answer": "Actuator dependency (spring-boot-starter-actuator) enables operational monitoring endpoints (/actuator/health, /actuator/metrics) configured via management.endpoints.web.exposure.include in application.properties.",
+    "expected_entities": [
+      "spring-boot-starter-actuator",
+      "/actuator/health",
+      "management.endpoints.web.exposure.include"
+    ]
+  },
+  {
+    "id": "PETCLINIC_Q30",
+    "category": "Type4_ConfigWiring",
+    "question": "How is Internationalization (i18n) and MessageSource configured for UI text strings?",
+    "ground_truth_answer": "Internationalization is configured via ResourceBundleMessageSource loading messages.properties / messages_de.properties under src/main/resources/messages. LocaleChangeInterceptor detects locale switches from HTTP parameters.",
+    "expected_entities": [
+      "MessageSource",
+      "messages.properties",
+      "LocaleChangeInterceptor",
+      "i18n",
+      "ResourceBundleMessageSource"
+    ]
+  }
+]

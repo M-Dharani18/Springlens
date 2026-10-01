@@ -1,0 +1,201 @@
+id,condition,strategy,retrieval,entity_coverage,entities_found,entities_total,found,missing,answer_len
+PETCLINIC_Q01,C1,generic,dense,0.625,5,8,"PetValidator, PetController, Validator, BindingResult, validate","WebDataBinder, @InitBinder, @Valid",1461
+PETCLINIC_Q01,C2,generic,hybrid,0.375,3,8,"PetValidator, Validator, validate","PetController, WebDataBinder, @InitBinder, BindingResult, @Valid",882
+PETCLINIC_Q01,C3,ast_framework,dense,0.375,3,8,"PetValidator, Validator, validate","PetController, WebDataBinder, @InitBinder, BindingResult, @Valid",775
+PETCLINIC_Q01,C4,ast_framework,hybrid,0.375,3,8,"PetValidator, Validator, validate","PetController, WebDataBinder, @InitBinder, BindingResult, @Valid",999
+PETCLINIC_Q09,C1,generic,dense,0.5,4,8,"VisitController, Visit, Pet, save","OwnerRepository, VisitRepository, processNewVisitForm, @PostMapping",943
+PETCLINIC_Q09,C2,generic,hybrid,0.625,5,8,"VisitController, Visit, Pet, OwnerRepository, processNewVisitForm","VisitRepository, @PostMapping, save",1561
+PETCLINIC_Q09,C3,ast_framework,dense,0.625,5,8,"VisitController, Visit, Pet, processNewVisitForm, save","OwnerRepository, VisitRepository, @PostMapping",1254
+PETCLINIC_Q09,C4,ast_framework,hybrid,0.5,4,8,"VisitController, Visit, Pet, OwnerRepository","VisitRepository, processNewVisitForm, @PostMapping, save",833
+PETCLINIC_Q17,C1,generic,dense,0.1667,1,6,Repository,"OwnerRepository, VetRepository, VisitRepository, JpaRepository, Spring Data JPA",396
+PETCLINIC_Q17,C2,generic,hybrid,0.5,3,6,"VetRepository, JpaRepository, Repository","OwnerRepository, VisitRepository, Spring Data JPA",881
+PETCLINIC_Q17,C3,ast_framework,dense,0.1667,1,6,Repository,"OwnerRepository, VetRepository, VisitRepository, JpaRepository, Spring Data JPA",430
+PETCLINIC_Q17,C4,ast_framework,hybrid,0.1667,1,6,Repository,"OwnerRepository, VetRepository, VisitRepository, JpaRepository, Spring Data JPA",619
+PETCLINIC_Q25,C1,generic,dense,0.0,0,5,,"@EnableCaching, @Configuration, CacheManager, CaffeineCacheManager, @Cacheable",162
+PETCLINIC_Q25,C2,generic,hybrid,0.0,0,5,,"@EnableCaching, @Configuration, CacheManager, CaffeineCacheManager, @Cacheable",170
+PETCLINIC_Q25,C3,ast_framework,dense,0.4,2,5,"@EnableCaching, CacheManager","@Configuration, CaffeineCacheManager, @Cacheable",823
+PETCLINIC_Q25,C4,ast_framework,hybrid,0.0,0,5,,"@EnableCaching, @Configuration, CacheManager, CaffeineCacheManager, @Cacheable",155
+PETCLINIC_Q02,C1,generic,dense,0.125,1,8,OwnerController,"@Controller, @GetMapping, @PostMapping, OwnerRepository, processCreationForm, processFindForm, showOwner",818
+PETCLINIC_Q02,C2,generic,hybrid,0.25,2,8,"OwnerController, OwnerRepository","@Controller, @GetMapping, @PostMapping, processCreationForm, processFindForm, showOwner",786
+PETCLINIC_Q02,C3,ast_framework,dense,0.5,4,8,"OwnerController, @Controller, OwnerRepository, showOwner","@GetMapping, @PostMapping, processCreationForm, processFindForm",729
+PETCLINIC_Q02,C4,ast_framework,hybrid,0.625,5,8,"OwnerController, @Controller, @GetMapping, OwnerRepository, showOwner","@PostMapping, processCreationForm, processFindForm",1109
+PETCLINIC_Q03,C1,generic,dense,0.5,3,6,"VetRepository, Vet, findAll","Specialty, @Repository, JpaRepository",887
+PETCLINIC_Q03,C2,generic,hybrid,0.5,3,6,"VetRepository, Vet, findAll","Specialty, @Repository, JpaRepository",1111
+PETCLINIC_Q03,C3,ast_framework,dense,0.5,3,6,"VetRepository, Vet, findAll","Specialty, @Repository, JpaRepository",804
+PETCLINIC_Q03,C4,ast_framework,hybrid,0.5,3,6,"VetRepository, Vet, findAll","Specialty, @Repository, JpaRepository",773
+PETCLINIC_Q04,C1,generic,dense,0.4286,3,7,"Visit, Pet, date","@Entity, @ManyToOne, @OneToMany, description",1037
+PETCLINIC_Q04,C2,generic,hybrid,0.8571,6,7,"Visit, Pet, @Entity, @OneToMany, date, description",@ManyToOne,1132
+PETCLINIC_Q04,C3,ast_framework,dense,0.5714,4,7,"Visit, Pet, @Entity, date","@ManyToOne, @OneToMany, description",1073
+PETCLINIC_Q04,C4,ast_framework,hybrid,0.4286,3,7,"Visit, Pet, @Entity","@ManyToOne, @OneToMany, date, description",1105
+PETCLINIC_Q05,C1,generic,dense,0.1667,1,6,ClinicService,"OwnerRepository, PetRepository, VetRepository, @Service, @Transactional",471
+PETCLINIC_Q05,C2,generic,hybrid,0.5,3,6,"ClinicService, OwnerRepository, VetRepository","PetRepository, @Service, @Transactional",575
+PETCLINIC_Q05,C3,ast_framework,dense,0.5,3,6,"ClinicService, OwnerRepository, VetRepository","PetRepository, @Service, @Transactional",484
+PETCLINIC_Q05,C4,ast_framework,hybrid,0.5,3,6,"ClinicService, OwnerRepository, VetRepository","PetRepository, @Service, @Transactional",750
+PETCLINIC_Q06,C1,generic,dense,0.8333,5,6,"PetTypeFormatter, Formatter, PetType, parse, print",OwnerRepository,851
+PETCLINIC_Q06,C2,generic,hybrid,0.8333,5,6,"PetTypeFormatter, Formatter, PetType, parse, print",OwnerRepository,936
+PETCLINIC_Q06,C3,ast_framework,dense,0.8333,5,6,"PetTypeFormatter, Formatter, PetType, parse, print",OwnerRepository,429
+PETCLINIC_Q06,C4,ast_framework,hybrid,0.8333,5,6,"PetTypeFormatter, Formatter, PetType, parse, print",OwnerRepository,850
+PETCLINIC_Q07,C1,generic,dense,0.6667,4,6,"Specialty, Vet, NamedEntity, @ManyToMany","@Entity, @JoinTable",1119
+PETCLINIC_Q07,C2,generic,hybrid,1.0,6,6,"Specialty, Vet, NamedEntity, @Entity, @ManyToMany, @JoinTable",,1007
+PETCLINIC_Q07,C3,ast_framework,dense,0.5,3,6,"Specialty, Vet, @Entity","NamedEntity, @ManyToMany, @JoinTable",682
+PETCLINIC_Q07,C4,ast_framework,hybrid,0.5,3,6,"Specialty, Vet, @Entity","NamedEntity, @ManyToMany, @JoinTable",758
+PETCLINIC_Q08,C1,generic,dense,0.7143,5,7,"BaseEntity, NamedEntity, @MappedSuperclass, id, name","@Id, @GeneratedValue",647
+PETCLINIC_Q08,C2,generic,hybrid,0.7143,5,7,"BaseEntity, NamedEntity, @MappedSuperclass, id, name","@Id, @GeneratedValue",690
+PETCLINIC_Q08,C3,ast_framework,dense,0.4286,3,7,"BaseEntity, @MappedSuperclass, id","NamedEntity, @Id, @GeneratedValue, name",406
+PETCLINIC_Q08,C4,ast_framework,hybrid,0.7143,5,7,"BaseEntity, NamedEntity, @MappedSuperclass, id, name","@Id, @GeneratedValue",471
+PETCLINIC_Q10,C1,generic,dense,0.5,3,6,"OwnerRepository, Owner, findByLastName","OwnerController, processFindForm, @GetMapping",1088
+PETCLINIC_Q10,C2,generic,hybrid,0.8333,5,6,"OwnerController, OwnerRepository, Owner, processFindForm, findByLastName",@GetMapping,1327
+PETCLINIC_Q10,C3,ast_framework,dense,0.6667,4,6,"OwnerController, OwnerRepository, Owner, findByLastName","processFindForm, @GetMapping",989
+PETCLINIC_Q10,C4,ast_framework,hybrid,0.8333,5,6,"OwnerController, OwnerRepository, Owner, processFindForm, findByLastName",@GetMapping,1070
+PETCLINIC_Q11,C1,generic,dense,0.1429,1,7,PetController,"@ModelAttribute, populatePetTypes, OwnerRepository, findPetTypes, PetTypeFormatter, PetType",566
+PETCLINIC_Q11,C2,generic,hybrid,0.7143,5,7,"PetController, @ModelAttribute, populatePetTypes, findPetTypes, PetType","OwnerRepository, PetTypeFormatter",1016
+PETCLINIC_Q11,C3,ast_framework,dense,0.7143,5,7,"PetController, @ModelAttribute, populatePetTypes, findPetTypes, PetType","OwnerRepository, PetTypeFormatter",1028
+PETCLINIC_Q11,C4,ast_framework,hybrid,0.2857,2,7,"PetController, PetType","@ModelAttribute, populatePetTypes, OwnerRepository, findPetTypes, PetTypeFormatter",450
+PETCLINIC_Q12,C1,generic,dense,0.4286,3,7,"Owner, processUpdateOwnerForm, save","OwnerController, OwnerRepository, BindingResult, @Valid",1115
+PETCLINIC_Q12,C2,generic,hybrid,0.4286,3,7,"OwnerRepository, Owner, save","OwnerController, processUpdateOwnerForm, BindingResult, @Valid",1148
+PETCLINIC_Q12,C3,ast_framework,dense,0.8571,6,7,"OwnerController, Owner, processUpdateOwnerForm, BindingResult, @Valid, save",OwnerRepository,1515
+PETCLINIC_Q12,C4,ast_framework,hybrid,0.8571,6,7,"OwnerController, OwnerRepository, Owner, processUpdateOwnerForm, BindingResult, save",@Valid,1447
+PETCLINIC_Q13,C1,generic,dense,0.2857,2,7,"Vets, Vet","VetController, VetRepository, showVetList, findAll, @GetMapping",1003
+PETCLINIC_Q13,C2,generic,hybrid,0.8571,6,7,"VetController, VetRepository, Vets, Vet, findAll, @GetMapping",showVetList,1183
+PETCLINIC_Q13,C3,ast_framework,dense,0.7143,5,7,"VetController, VetRepository, Vets, Vet, findAll","showVetList, @GetMapping",1156
+PETCLINIC_Q13,C4,ast_framework,hybrid,0.8571,6,7,"VetController, VetRepository, Vets, Vet, findAll, @GetMapping",showVetList,1203
+PETCLINIC_Q14,C1,generic,dense,0.5,3,6,"PetController, @InitBinder, WebDataBinder","PetValidator, setDisallowedFields, initPetBinder",1117
+PETCLINIC_Q14,C2,generic,hybrid,1.0,6,6,"PetController, @InitBinder, WebDataBinder, PetValidator, setDisallowedFields, initPetBinder",,780
+PETCLINIC_Q14,C3,ast_framework,dense,1.0,6,6,"PetController, @InitBinder, WebDataBinder, PetValidator, setDisallowedFields, initPetBinder",,711
+PETCLINIC_Q14,C4,ast_framework,hybrid,0.1667,1,6,PetController,"@InitBinder, WebDataBinder, PetValidator, setDisallowedFields, initPetBinder",1317
+PETCLINIC_Q15,C1,generic,dense,0.2,1,5,@Transactional,"TransactionInterceptor, EntityManager, ClinicService, OwnerRepository",908
+PETCLINIC_Q15,C2,generic,hybrid,0.4,2,5,"@Transactional, ClinicService","TransactionInterceptor, EntityManager, OwnerRepository",714
+PETCLINIC_Q15,C3,ast_framework,dense,0.0,0,5,,"@Transactional, TransactionInterceptor, EntityManager, ClinicService, OwnerRepository",422
+PETCLINIC_Q15,C4,ast_framework,hybrid,0.4,2,5,"@Transactional, ClinicService","TransactionInterceptor, EntityManager, OwnerRepository",1037
+PETCLINIC_Q16,C1,generic,dense,0.6,3,5,"WelcomeController, @GetMapping, welcome","BasicErrorController, @ControllerAdvice",1234
+PETCLINIC_Q16,C2,generic,hybrid,0.6,3,5,"WelcomeController, @GetMapping, welcome","BasicErrorController, @ControllerAdvice",1261
+PETCLINIC_Q16,C3,ast_framework,dense,0.4,2,5,"WelcomeController, welcome","BasicErrorController, @ControllerAdvice, @GetMapping",932
+PETCLINIC_Q16,C4,ast_framework,hybrid,0.6,3,5,"WelcomeController, @GetMapping, welcome","BasicErrorController, @ControllerAdvice",1272
+PETCLINIC_Q18,C1,generic,dense,0.0,0,5,,"OwnerController, OwnerRepository, Constructor Injection, @Autowired, final",330
+PETCLINIC_Q18,C2,generic,hybrid,0.4,2,5,"Constructor Injection, @Autowired","OwnerController, OwnerRepository, final",541
+PETCLINIC_Q18,C3,ast_framework,dense,0.2,1,5,OwnerRepository,"OwnerController, Constructor Injection, @Autowired, final",389
+PETCLINIC_Q18,C4,ast_framework,hybrid,0.0,0,5,,"OwnerController, OwnerRepository, Constructor Injection, @Autowired, final",169
+PETCLINIC_Q19,C1,generic,dense,0.5714,4,7,"Model, OwnerController, Owner, Pet","@Controller, Thymeleaf, Vet",1136
+PETCLINIC_Q19,C2,generic,hybrid,0.7143,5,7,"@Controller, Model, OwnerController, Owner, Vet","Thymeleaf, Pet",1415
+PETCLINIC_Q19,C3,ast_framework,dense,0.7143,5,7,"@Controller, Model, OwnerController, Owner, Pet","Thymeleaf, Vet",1249
+PETCLINIC_Q19,C4,ast_framework,hybrid,0.8571,6,7,"@Controller, Model, OwnerController, Owner, Pet, Vet",Thymeleaf,1243
+PETCLINIC_Q20,C1,generic,dense,0.8333,5,6,"Validator, PetValidator, supports, validate, Errors",BindingResult,1162
+PETCLINIC_Q20,C2,generic,hybrid,0.8333,5,6,"Validator, PetValidator, supports, validate, Errors",BindingResult,1158
+PETCLINIC_Q20,C3,ast_framework,dense,0.8333,5,6,"Validator, PetValidator, supports, validate, Errors",BindingResult,1343
+PETCLINIC_Q20,C4,ast_framework,hybrid,0.5,3,6,"Validator, PetValidator, validate","supports, Errors, BindingResult",845
+PETCLINIC_Q21,C1,generic,dense,0.5,3,6,"Pet, Visit, Owner","BindingResult, @Valid, @ModelAttribute",951
+PETCLINIC_Q21,C2,generic,hybrid,0.1667,1,6,Pet,"Visit, Owner, BindingResult, @Valid, @ModelAttribute",682
+PETCLINIC_Q21,C3,ast_framework,dense,0.6667,4,6,"Pet, Owner, BindingResult, @Valid","Visit, @ModelAttribute",1073
+PETCLINIC_Q21,C4,ast_framework,hybrid,0.6667,4,6,"Pet, Owner, BindingResult, @Valid","Visit, @ModelAttribute",822
+PETCLINIC_Q22,C1,generic,dense,1.0,5,5,"BaseEntity, NamedEntity, @MappedSuperclass, @Id, @GeneratedValue",,1108
+PETCLINIC_Q22,C2,generic,hybrid,1.0,5,5,"BaseEntity, NamedEntity, @MappedSuperclass, @Id, @GeneratedValue",,1074
+PETCLINIC_Q22,C3,ast_framework,dense,0.2,1,5,@MappedSuperclass,"BaseEntity, NamedEntity, @Id, @GeneratedValue",382
+PETCLINIC_Q22,C4,ast_framework,hybrid,0.4,2,5,"BaseEntity, @MappedSuperclass","NamedEntity, @Id, @GeneratedValue",592
+PETCLINIC_Q23,C1,generic,dense,0.8,4,5,"@Cacheable, VetRepository, findAll, CacheManager",Caffeine,923
+PETCLINIC_Q23,C2,generic,hybrid,0.2,1,5,CacheManager,"@Cacheable, VetRepository, findAll, Caffeine",754
+PETCLINIC_Q23,C3,ast_framework,dense,0.2,1,5,CacheManager,"@Cacheable, VetRepository, findAll, Caffeine",749
+PETCLINIC_Q23,C4,ast_framework,hybrid,0.4,2,5,"VetRepository, findAll","@Cacheable, CacheManager, Caffeine",630
+PETCLINIC_Q24,C1,generic,dense,0.4,2,5,"@Controller, @GetMapping","DispatcherServlet, HandlerMapping, ViewResolver",934
+PETCLINIC_Q24,C2,generic,hybrid,0.4,2,5,"@Controller, @GetMapping","DispatcherServlet, HandlerMapping, ViewResolver",408
+PETCLINIC_Q24,C3,ast_framework,dense,0.6,3,5,"DispatcherServlet, @Controller, @GetMapping","HandlerMapping, ViewResolver",756
+PETCLINIC_Q24,C4,ast_framework,hybrid,0.4,2,5,"@Controller, @GetMapping","DispatcherServlet, HandlerMapping, ViewResolver",534
+PETCLINIC_Q26,C1,generic,dense,0.2,1,5,DataSource,"application.properties, spring.datasource.url, spring.jpa.hibernate.ddl-auto, EntityManagerFactory",721
+PETCLINIC_Q26,C2,generic,hybrid,0.4,2,5,"application.properties, DataSource","spring.datasource.url, spring.jpa.hibernate.ddl-auto, EntityManagerFactory",649
+PETCLINIC_Q26,C3,ast_framework,dense,0.2,1,5,DataSource,"application.properties, spring.datasource.url, spring.jpa.hibernate.ddl-auto, EntityManagerFactory",363
+PETCLINIC_Q26,C4,ast_framework,hybrid,0.2,1,5,DataSource,"application.properties, spring.datasource.url, spring.jpa.hibernate.ddl-auto, EntityManagerFactory",145
+PETCLINIC_Q27,C1,generic,dense,0.3333,2,6,"@Profile, spring.profiles.active","schema.sql, data.sql, application-h2.properties, application-postgres.properties",1065
+PETCLINIC_Q27,C2,generic,hybrid,0.3333,2,6,"@Profile, spring.profiles.active","schema.sql, data.sql, application-h2.properties, application-postgres.properties",1162
+PETCLINIC_Q27,C3,ast_framework,dense,0.1667,1,6,spring.profiles.active,"@Profile, schema.sql, data.sql, application-h2.properties, application-postgres.properties",355
+PETCLINIC_Q27,C4,ast_framework,hybrid,0.1667,1,6,@Profile,"spring.profiles.active, schema.sql, data.sql, application-h2.properties, application-postgres.properties",851
+PETCLINIC_Q28,C1,generic,dense,0.4,2,5,"WebJars, css","WebMvcAutoConfiguration, resources/static, Bootstrap",439
+PETCLINIC_Q28,C2,generic,hybrid,0.4,2,5,"WebJars, css","WebMvcAutoConfiguration, resources/static, Bootstrap",274
+PETCLINIC_Q28,C3,ast_framework,dense,0.4,2,5,"WebJars, css","WebMvcAutoConfiguration, resources/static, Bootstrap",389
+PETCLINIC_Q28,C4,ast_framework,hybrid,0.4,2,5,"WebJars, css","WebMvcAutoConfiguration, resources/static, Bootstrap",385
+PETCLINIC_Q29,C1,generic,dense,0.0,0,3,,"spring-boot-starter-actuator, /actuator/health, management.endpoints.web.exposure.include",349
+PETCLINIC_Q29,C2,generic,hybrid,0.0,0,3,,"spring-boot-starter-actuator, /actuator/health, management.endpoints.web.exposure.include",611
+PETCLINIC_Q29,C3,ast_framework,dense,0.0,0,3,,"spring-boot-starter-actuator, /actuator/health, management.endpoints.web.exposure.include",149
+PETCLINIC_Q29,C4,ast_framework,hybrid,0.0,0,3,,"spring-boot-starter-actuator, /actuator/health, management.endpoints.web.exposure.include",137
+PETCLINIC_Q30,C1,generic,dense,0.6,3,5,"messages.properties, LocaleChangeInterceptor, i18n","MessageSource, ResourceBundleMessageSource",1163
+PETCLINIC_Q30,C2,generic,hybrid,0.4,2,5,"LocaleChangeInterceptor, i18n","MessageSource, messages.properties, ResourceBundleMessageSource",1375
+PETCLINIC_Q30,C3,ast_framework,dense,0.4,2,5,"LocaleChangeInterceptor, i18n","MessageSource, messages.properties, ResourceBundleMessageSource",971
+PETCLINIC_Q30,C4,ast_framework,hybrid,0.2,1,5,i18n,"MessageSource, messages.properties, LocaleChangeInterceptor, ResourceBundleMessageSource",942
+REALWORLD_Q01,C1,generic,dense,1.0,6,6,"JwtTokenFilter, JwtService, OncePerRequestFilter, SecurityContextHolder, Authentication, Authorization",,2615
+REALWORLD_Q02,C1,generic,dense,0.2857,2,7,"ArticleController, ArticlesApi","@RestController, @GetMapping, @PostMapping, ArticleQueryService, ArticleRepository",459
+REALWORLD_Q03,C1,generic,dense,0.1667,1,6,errors,"DefaultExceptionHandler, @RestControllerAdvice, @ExceptionHandler, BindingResult, FieldError",3071
+REALWORLD_Q04,C1,generic,dense,0.6667,4,6,"UserQueryService, UserData, CQRS, @Service","ProfileData, read-only",2572
+REALWORLD_Q05,C1,generic,dense,0.6667,4,6,"Comment, CommentsApi, CommentRepository, CommentData","@RestController, article_id",3047
+REALWORLD_Q06,C1,generic,dense,0.7143,5,7,"UsersApi, UserRepository, JwtService, RegisterParam, UserData","UserCommandService, EncryptService",2384
+REALWORLD_Q07,C1,generic,dense,0.5,3,6,"ArticleQueryService, ArticleData, slug","ArticlesApi, Slugifier, @GetMapping",3627
+REALWORLD_Q08,C1,generic,dense,0.5,3,6,"ArticleFavoriteRepository, User, ArticleData","ArticleFavoritesApi, favoriteArticle, @PostMapping",2741
+REALWORLD_Q09,C1,generic,dense,0.3333,2,6,"ProfileData, follow","ProfilesApi, UserRelationshipRepository, ProfileQueryService, @PostMapping",2979
+REALWORLD_Q10,C1,generic,dense,0.6667,4,6,"ArticleQueryService, tag, limit, offset","ArticlesApi, ArticlesWithCount",4833
+REALWORLD_Q11,C1,generic,dense,0.4286,3,7,"CQRS, ArticleQueryService, ArticleData","UserCommandService, UserQueryService, ArticleCommandService, UserData",2317
+REALWORLD_Q12,C1,generic,dense,0.6,3,5,"Value Object, Email, validation","UserId, immutable",839
+REALWORLD_Q13,C1,generic,dense,0.6667,4,6,"Jackson, @JsonRootName, user, article","ObjectMapper, RootSerializer",1354
+REALWORLD_Q14,C1,generic,dense,0.5,3,6,"HandlerMethodArgumentResolver, SecurityContext, User","@CurrentUser, supportsParameter, resolveArgument",1497
+REALWORLD_Q15,C1,generic,dense,0.8333,5,6,"UserRepository, ArticleRepository, MyBatis, interface, infrastructure",JPA,2797
+REALWORLD_Q16,C1,generic,dense,0.8333,5,6,"WebSecurityConfigurerAdapter, HttpSecurity, JwtTokenFilter, authorizeRequests, permitAll",SecurityFilterChain,3403
+REALWORLD_Q17,C1,generic,dense,0.8,4,5,"BCryptPasswordEncoder, PasswordEncoder, @Bean, @Configuration",UserCommandService,1904
+REALWORLD_Q18,C1,generic,dense,0.4,2,5,"WebMvcConfigurer, allowedOrigins","CorsRegistry, addCorsMappings, allowedMethods",1689
+REALWORLD_Q19,C1,generic,dense,0.4,2,5,"MyBatis, XML","@MapperScan, SqlSessionFactory, resources/mapper",1690
+REALWORLD_Q20,C1,generic,dense,0.8,4,5,"application.properties, @Value, jwt.secret, jwt.sessionTime",@ConfigurationProperties,1785
+REALWORLD_Q01,C2,generic,hybrid,0.3333,2,6,"JwtService, Authentication","JwtTokenFilter, OncePerRequestFilter, SecurityContextHolder, Authorization",2784
+REALWORLD_Q02,C2,generic,hybrid,0.4286,3,7,"ArticlesApi, @RestController, ArticleQueryService","ArticleController, @GetMapping, @PostMapping, ArticleRepository",3511
+REALWORLD_Q03,C2,generic,hybrid,0.3333,2,6,"FieldError, errors","DefaultExceptionHandler, @RestControllerAdvice, @ExceptionHandler, BindingResult",3258
+REALWORLD_Q04,C2,generic,hybrid,0.8333,5,6,"UserQueryService, UserData, CQRS, @Service, read-only",ProfileData,2558
+REALWORLD_Q05,C2,generic,hybrid,0.6667,4,6,"Comment, CommentsApi, CommentRepository, CommentData","@RestController, article_id",3151
+REALWORLD_Q06,C2,generic,hybrid,0.7143,5,7,"UsersApi, UserRepository, JwtService, RegisterParam, UserData","UserCommandService, EncryptService",2552
+REALWORLD_Q07,C2,generic,hybrid,0.5,3,6,"ArticleQueryService, ArticleData, slug","ArticlesApi, Slugifier, @GetMapping",4619
+REALWORLD_Q08,C2,generic,hybrid,0.5,3,6,"ArticleFavoriteRepository, User, ArticleData","ArticleFavoritesApi, favoriteArticle, @PostMapping",2573
+REALWORLD_Q09,C2,generic,hybrid,0.3333,2,6,"ProfileQueryService, follow","ProfilesApi, UserRelationshipRepository, ProfileData, @PostMapping",3074
+REALWORLD_Q10,C2,generic,hybrid,0.6667,4,6,"ArticleQueryService, tag, limit, offset","ArticlesApi, ArticlesWithCount",2336
+REALWORLD_Q11,C2,generic,hybrid,0.5714,4,7,"CQRS, ArticleCommandService, ArticleQueryService, ArticleData","UserCommandService, UserQueryService, UserData",2187
+REALWORLD_Q12,C2,generic,hybrid,0.6,3,5,"Value Object, Email, validation","UserId, immutable",824
+REALWORLD_Q13,C2,generic,hybrid,0.1667,1,6,Jackson,"ObjectMapper, @JsonRootName, RootSerializer, user, article",2062
+REALWORLD_Q14,C2,generic,hybrid,0.3333,2,6,"SecurityContext, User","@CurrentUser, HandlerMethodArgumentResolver, supportsParameter, resolveArgument",2513
+REALWORLD_Q15,C2,generic,hybrid,0.8333,5,6,"UserRepository, ArticleRepository, MyBatis, interface, infrastructure",JPA,3170
+REALWORLD_Q16,C2,generic,hybrid,0.8333,5,6,"WebSecurityConfigurerAdapter, HttpSecurity, JwtTokenFilter, authorizeRequests, permitAll",SecurityFilterChain,2803
+REALWORLD_Q17,C2,generic,hybrid,0.8,4,5,"BCryptPasswordEncoder, PasswordEncoder, @Bean, @Configuration",UserCommandService,2087
+REALWORLD_Q18,C2,generic,hybrid,0.6,3,5,"WebMvcConfigurer, allowedOrigins, allowedMethods","CorsRegistry, addCorsMappings",2198
+REALWORLD_Q19,C2,generic,hybrid,0.4,2,5,"MyBatis, XML","@MapperScan, SqlSessionFactory, resources/mapper",2401
+REALWORLD_Q20,C2,generic,hybrid,0.8,4,5,"application.properties, @Value, jwt.secret, jwt.sessionTime",@ConfigurationProperties,2107
+REALWORLD_Q01,C3,ast_framework,dense,0.1667,1,6,JwtService,"JwtTokenFilter, OncePerRequestFilter, SecurityContextHolder, Authentication, Authorization",2237
+REALWORLD_Q02,C3,ast_framework,dense,0.7143,5,7,"ArticlesApi, @RestController, @GetMapping, @PostMapping, ArticleQueryService","ArticleController, ArticleRepository",2981
+REALWORLD_Q03,C3,ast_framework,dense,0.5,3,6,"@RestControllerAdvice, FieldError, errors","DefaultExceptionHandler, @ExceptionHandler, BindingResult",3023
+REALWORLD_Q04,C3,ast_framework,dense,0.8333,5,6,"UserQueryService, UserData, CQRS, @Service, read-only",ProfileData,2083
+REALWORLD_Q05,C3,ast_framework,dense,0.6667,4,6,"Comment, CommentsApi, CommentRepository, CommentData","@RestController, article_id",3142
+REALWORLD_Q06,C3,ast_framework,dense,0.7143,5,7,"UsersApi, UserRepository, JwtService, RegisterParam, UserData","UserCommandService, EncryptService",2173
+REALWORLD_Q07,C3,ast_framework,dense,0.3333,2,6,"ArticleData, slug","ArticlesApi, ArticleQueryService, Slugifier, @GetMapping",2553
+REALWORLD_Q08,C3,ast_framework,dense,0.3333,2,6,"ArticleFavoriteRepository, User","ArticleFavoritesApi, ArticleData, favoriteArticle, @PostMapping",1807
+REALWORLD_Q09,C3,ast_framework,dense,0.5,3,6,"ProfileQueryService, ProfileData, follow","ProfilesApi, UserRelationshipRepository, @PostMapping",3067
+REALWORLD_Q10,C3,ast_framework,dense,0.5,3,6,"tag, limit, offset","ArticlesApi, ArticleQueryService, ArticlesWithCount",3343
+REALWORLD_Q11,C3,ast_framework,dense,0.2857,2,7,"CQRS, ArticleQueryService","UserCommandService, UserQueryService, ArticleCommandService, UserData, ArticleData",2051
+REALWORLD_Q12,C3,ast_framework,dense,0.6,3,5,"Value Object, Email, validation","UserId, immutable",1001
+REALWORLD_Q13,C3,ast_framework,dense,0.5,3,6,"Jackson, @JsonRootName, user","ObjectMapper, RootSerializer, article",3476
+REALWORLD_Q14,C3,ast_framework,dense,0.3333,2,6,"SecurityContext, User","@CurrentUser, HandlerMethodArgumentResolver, supportsParameter, resolveArgument",2735
+REALWORLD_Q15,C3,ast_framework,dense,0.8333,5,6,"UserRepository, MyBatis, JPA, interface, infrastructure",ArticleRepository,2507
+REALWORLD_Q16,C3,ast_framework,dense,0.8333,5,6,"WebSecurityConfigurerAdapter, HttpSecurity, JwtTokenFilter, authorizeRequests, permitAll",SecurityFilterChain,2824
+REALWORLD_Q17,C3,ast_framework,dense,0.8,4,5,"BCryptPasswordEncoder, PasswordEncoder, @Bean, @Configuration",UserCommandService,2448
+REALWORLD_Q18,C3,ast_framework,dense,0.4,2,5,"allowedOrigins, allowedMethods","WebMvcConfigurer, CorsRegistry, addCorsMappings",2813
+REALWORLD_Q19,C3,ast_framework,dense,0.4,2,5,"MyBatis, XML","@MapperScan, SqlSessionFactory, resources/mapper",1430
+REALWORLD_Q20,C3,ast_framework,dense,0.8,4,5,"application.properties, @Value, jwt.secret, jwt.sessionTime",@ConfigurationProperties,1713
+REALWORLD_Q01,C4,ast_framework,hybrid,1.0,6,6,"JwtTokenFilter, JwtService, OncePerRequestFilter, SecurityContextHolder, Authentication, Authorization",,3155
+REALWORLD_Q02,C4,ast_framework,hybrid,0.4286,3,7,"ArticlesApi, @RestController, ArticleQueryService","ArticleController, @GetMapping, @PostMapping, ArticleRepository",2530
+REALWORLD_Q03,C4,ast_framework,hybrid,0.8333,5,6,"@RestControllerAdvice, @ExceptionHandler, BindingResult, FieldError, errors",DefaultExceptionHandler,4468
+REALWORLD_Q04,C4,ast_framework,hybrid,0.8333,5,6,"UserQueryService, UserData, CQRS, @Service, read-only",ProfileData,1675
+REALWORLD_Q05,C4,ast_framework,hybrid,0.6667,4,6,"Comment, CommentsApi, CommentRepository, CommentData","@RestController, article_id",3541
+REALWORLD_Q06,C4,ast_framework,hybrid,0.7143,5,7,"UsersApi, UserRepository, JwtService, RegisterParam, UserData","UserCommandService, EncryptService",2225
+REALWORLD_Q07,C4,ast_framework,hybrid,0.6667,4,6,"ArticleQueryService, ArticleData, slug, @GetMapping","ArticlesApi, Slugifier",4132
+REALWORLD_Q08,C4,ast_framework,hybrid,0.3333,2,6,"ArticleFavoriteRepository, User","ArticleFavoritesApi, ArticleData, favoriteArticle, @PostMapping",2252
+REALWORLD_Q09,C4,ast_framework,hybrid,0.5,3,6,"ProfileQueryService, ProfileData, follow","ProfilesApi, UserRelationshipRepository, @PostMapping",3107
+REALWORLD_Q10,C4,ast_framework,hybrid,0.3333,2,6,"tag, offset","ArticlesApi, ArticleQueryService, ArticlesWithCount, limit",2781
+REALWORLD_Q11,C4,ast_framework,hybrid,0.4286,3,7,"CQRS, ArticleQueryService, ArticleData","UserCommandService, UserQueryService, ArticleCommandService, UserData",2097
+REALWORLD_Q12,C4,ast_framework,hybrid,0.8,4,5,"Value Object, Email, UserId, validation",immutable,1017
+REALWORLD_Q13,C4,ast_framework,hybrid,0.6667,4,6,"Jackson, @JsonRootName, user, article","ObjectMapper, RootSerializer",3576
+REALWORLD_Q14,C4,ast_framework,hybrid,0.3333,2,6,"SecurityContext, User","@CurrentUser, HandlerMethodArgumentResolver, supportsParameter, resolveArgument",2239
+REALWORLD_Q15,C4,ast_framework,hybrid,0.8333,5,6,"UserRepository, MyBatis, JPA, interface, infrastructure",ArticleRepository,2899
+REALWORLD_Q16,C4,ast_framework,hybrid,0.8333,5,6,"WebSecurityConfigurerAdapter, HttpSecurity, JwtTokenFilter, authorizeRequests, permitAll",SecurityFilterChain,2663
+REALWORLD_Q17,C4,ast_framework,hybrid,0.8,4,5,"BCryptPasswordEncoder, PasswordEncoder, @Bean, @Configuration",UserCommandService,3011
+REALWORLD_Q18,C4,ast_framework,hybrid,0.6,3,5,"WebMvcConfigurer, allowedOrigins, allowedMethods","CorsRegistry, addCorsMappings",2524
+REALWORLD_Q19,C4,ast_framework,hybrid,0.4,2,5,"MyBatis, XML","@MapperScan, SqlSessionFactory, resources/mapper",498
+REALWORLD_Q20,C4,ast_framework,hybrid,0.8,4,5,"application.properties, @Value, jwt.secret, jwt.sessionTime",@ConfigurationProperties,2255

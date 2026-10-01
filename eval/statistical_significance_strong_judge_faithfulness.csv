@@ -1,0 +1,6 @@
+comparison,condition_A,condition_B,mean_A,mean_B,delta_percent,wilcoxon_w,wilcoxon_p,ttest_t,ttest_p,cohens_d,significance
+SpringLens Full (C4) vs Baseline (C1),C4,C1,0.993,0.9852,0.78,16.0,0.12666,1.013,0.31604,0.143,ns (p >= 0.05)
+Token + Hybrid (C2) vs Baseline (C1),C2,C1,0.985,0.9852,-0.02,25.0,0.47138,-0.027,0.97848,-0.004,ns (p >= 0.05)
+AST + Dense (C3) vs Baseline (C1),C3,C1,0.991,0.9852,0.58,30.0,0.27412,1.037,0.30475,0.147,ns (p >= 0.05)
+AST + Hybrid (C4) vs Token + Hybrid (C2),C4,C2,0.993,0.985,0.8,7.0,0.45809,0.693,0.49178,0.098,ns (p >= 0.05)
+AST + Hybrid (C4) vs AST + Dense (C3),C4,C3,0.993,0.991,0.2,8.5,0.34288,0.27,0.78858,0.038,ns (p >= 0.05)

@@ -1,0 +1,5 @@
+condition,n_rows,mean_faithfulness,min,max,description
+C1,50,0.9531080031080031,0.5,1.0,Generic Token + Dense  (baseline)
+C2,50,0.9660238095238095,0.4,1.0,Generic Token + Hybrid
+C3,50,0.9756666666666667,0.6,1.0,AST Framework + Dense
+C4,50,0.9958095238095238,0.8571428571428571,1.0,AST Framework + Hybrid

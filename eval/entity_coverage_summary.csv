@@ -1,0 +1,5 @@
+condition,description,mean_entity_coverage,n,min,max
+C1,Generic Token  + Dense  (baseline),0.4957,50,0.0,1.0
+C2,Generic Token  + Hybrid,0.5497,50,0.0,1.0
+C3,AST Framework  + Dense,0.5076,50,0.0,1.0
+C4,AST Framework  + Hybrid,0.5228,50,0.0,1.0

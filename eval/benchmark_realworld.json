@@ -1,0 +1,280 @@
+[
+  {
+    "id": "REALWORLD_Q01",
+    "category": "Type1_SingleComponent",
+    "question": "How is JWT authentication token extraction and validation implemented in the RealWorld Spring Boot backend?",
+    "ground_truth_answer": "JWT token validation is handled by JwtTokenFilter extending OncePerRequestFilter. It extracts the 'Authorization' header ('Token <jwt>'), verifies signature using JwtService, and sets Authentication in SecurityContextHolder.",
+    "expected_entities": [
+      "JwtTokenFilter",
+      "JwtService",
+      "OncePerRequestFilter",
+      "SecurityContextHolder",
+      "Authentication",
+      "Authorization"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q02",
+    "category": "Type1_SingleComponent",
+    "question": "What is the responsibility of ArticlesApi / ArticleController and what endpoints does it expose?",
+    "ground_truth_answer": "ArticleController handles HTTP requests for blog articles. It exposes GET /api/articles (feed/list), POST /api/articles (create), GET /api/articles/{slug} (fetch), PUT /api/articles/{slug} (update), and DELETE /api/articles/{slug} (delete).",
+    "expected_entities": [
+      "ArticleController",
+      "ArticlesApi",
+      "@RestController",
+      "@GetMapping",
+      "@PostMapping",
+      "ArticleQueryService",
+      "ArticleRepository"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q03",
+    "category": "Type1_SingleComponent",
+    "question": "How are custom user validation errors formatted in RealWorld API error responses?",
+    "ground_truth_answer": "Validation errors are mapped via DefaultExceptionHandler annotated with @RestControllerAdvice. Method handleValidationException converts FieldErrors into a standardized JSON error wrapper '{\"errors\": {\"field\": [\"message\"]}}'.",
+    "expected_entities": [
+      "DefaultExceptionHandler",
+      "@RestControllerAdvice",
+      "@ExceptionHandler",
+      "BindingResult",
+      "FieldError",
+      "errors"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q04",
+    "category": "Type1_SingleComponent",
+    "question": "What role does UserQueryService play in separating query operations from command operations?",
+    "ground_truth_answer": "UserQueryService acts as a read-only query service following CQRS principles. It executes optimized SQL queries to retrieve UserData and ProfileData DTOs for client presentation without mutating entity state.",
+    "expected_entities": [
+      "UserQueryService",
+      "UserData",
+      "ProfileData",
+      "CQRS",
+      "@Service",
+      "read-only"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q05",
+    "category": "Type1_SingleComponent",
+    "question": "How are comments on articles modeled and managed?",
+    "ground_truth_answer": "Comments are modeled by Comment entity with body, author_id, article_id, and timestamps. CommentsApi / CommentsController handles POST /api/articles/{slug}/comments and DELETE /api/articles/{slug}/comments/{id}.",
+    "expected_entities": [
+      "Comment",
+      "CommentsApi",
+      "CommentRepository",
+      "CommentData",
+      "@RestController",
+      "article_id"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q06",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace the execution flow when a new user registers via POST /api/users.",
+    "ground_truth_answer": "1. Request payload bound to RegisterParam in UsersApi.createUser(). 2. Validation annotations (@NotBlank, @Email) checked. 3. UserCommandService encrypts password via Encrypter/PasswordEncoder. 4. UserRepository persists new User entity. 5. JwtService generates JWT token. 6. Returns UserData JSON with JWT token.",
+    "expected_entities": [
+      "UsersApi",
+      "UserCommandService",
+      "UserRepository",
+      "EncryptService",
+      "JwtService",
+      "RegisterParam",
+      "UserData"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q07",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace how an article slug is generated and used to fetch article details.",
+    "ground_truth_answer": "1. Upon creation, Article title is slugified via Slugifier utility. 2. GET /api/articles/{slug} hits ArticlesApi.article(). 3. ArticleQueryService queries database by slug. 4. ArticleData DTO constructed with author profile and tag list. 5. JSON returned under 'article' root object.",
+    "expected_entities": [
+      "ArticlesApi",
+      "ArticleQueryService",
+      "Slugifier",
+      "ArticleData",
+      "slug",
+      "@GetMapping"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q08",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace how favoriting an article is persisted and updates favorite counts.",
+    "ground_truth_answer": "1. POST /api/articles/{slug}/favorite arrives at ArticleFavoritesApi.favoriteArticle(). 2. Resolves current authenticated User from SecurityContext. 3. ArticleFavoriteRepository saves User-Article favorite relationship. 4. Returns updated ArticleData with favorited=true and favoritesCount incremented.",
+    "expected_entities": [
+      "ArticleFavoritesApi",
+      "ArticleFavoriteRepository",
+      "User",
+      "ArticleData",
+      "favoriteArticle",
+      "@PostMapping"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q09",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace how user profile follow/unfollow actions flow through service and repository layers.",
+    "ground_truth_answer": "1. POST /api/profiles/{username}/follow hits ProfilesApi.follow(). 2. UserRelationshipRepository creates follow record between follower and followee. 3. ProfileQueryService fetches target user profile and sets following=true. 4. Returns ProfileData response.",
+    "expected_entities": [
+      "ProfilesApi",
+      "UserRelationshipRepository",
+      "ProfileQueryService",
+      "ProfileData",
+      "follow",
+      "@PostMapping"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q10",
+    "category": "Type2_CrossLayerFlow",
+    "question": "Trace how paginated article feeds are generated for tag filtering.",
+    "ground_truth_answer": "1. GET /api/articles?tag={tag}&limit=20&offset=0 arrives at ArticlesApi.getArticles(). 2. ArticleQueryService constructs query with tag filter. 3. Executes count query and paginated fetch query. 4. Returns ArticlesWithCount response containing article array and articlesCount.",
+    "expected_entities": [
+      "ArticlesApi",
+      "ArticleQueryService",
+      "ArticlesWithCount",
+      "tag",
+      "limit",
+      "offset"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q11",
+    "category": "Type3_DesignPattern",
+    "question": "How is CQRS (Command Query Responsibility Segregation) pattern realized in the project?",
+    "ground_truth_answer": "CQRS is realized by splitting write operations into Command Services (UserCommandService, ArticleCommandService) and read operations into Query Services (UserQueryService, ArticleQueryService returning immutable DTOs like UserData, ArticleData).",
+    "expected_entities": [
+      "CQRS",
+      "UserCommandService",
+      "UserQueryService",
+      "ArticleCommandService",
+      "ArticleQueryService",
+      "UserData",
+      "ArticleData"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q12",
+    "category": "Type3_DesignPattern",
+    "question": "How is the Value Object pattern implemented for domain identifiers and email addresses?",
+    "ground_truth_answer": "Value objects (e.g. Email, UserId) encapsulate validation rules within immutable objects to prevent primitive obsession and ensure valid state upon creation.",
+    "expected_entities": [
+      "Value Object",
+      "Email",
+      "UserId",
+      "immutable",
+      "validation"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q13",
+    "category": "Type3_DesignPattern",
+    "question": "How is Jackson custom serialization configured for wrapping API responses in root keys?",
+    "ground_truth_answer": "RealWorld API specs require root wrapper keys (e.g. '{\"user\": {...}}'). Custom Jackson serializers or Jackson @JsonRootName / @JsonTypeInfo annotations wrap objects cleanly upon HTTP response serialization.",
+    "expected_entities": [
+      "Jackson",
+      "ObjectMapper",
+      "@JsonRootName",
+      "RootSerializer",
+      "user",
+      "article"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q14",
+    "category": "Type3_DesignPattern",
+    "question": "How is the Custom Annotation pattern used to inject current authenticated users into controller method parameters?",
+    "ground_truth_answer": "Custom parameter annotation @CurrentUser coupled with HandlerMethodArgumentResolver intercepts controller parameters and injects current authenticated User instance directly from SecurityContext.",
+    "expected_entities": [
+      "@CurrentUser",
+      "HandlerMethodArgumentResolver",
+      "SecurityContext",
+      "User",
+      "supportsParameter",
+      "resolveArgument"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q15",
+    "category": "Type3_DesignPattern",
+    "question": "How is the Repository interface pattern implemented for database independence?",
+    "ground_truth_answer": "Domain repositories (UserRepository, ArticleRepository) are clean interfaces. Infrastructure implementations (MyBatis or JPA mappers) implement these interfaces, isolating business logic from database choice.",
+    "expected_entities": [
+      "UserRepository",
+      "ArticleRepository",
+      "MyBatis",
+      "JPA",
+      "interface",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q16",
+    "category": "Type4_ConfigWiring",
+    "question": "How is Spring Security configured to secure REST API endpoints while leaving public endpoints accessible?",
+    "ground_truth_answer": "WebSecurityConfigurerAdapter / SecurityFilterChain bean configures HttpSecurity. It permits anonymous access to POST /api/users, POST /api/users/login, and GET /api/articles/** while requiring authentication for POST/PUT/DELETE endpoints via JwtTokenFilter.",
+    "expected_entities": [
+      "SecurityFilterChain",
+      "WebSecurityConfigurerAdapter",
+      "HttpSecurity",
+      "JwtTokenFilter",
+      "authorizeRequests",
+      "permitAll"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q17",
+    "category": "Type4_ConfigWiring",
+    "question": "How is PasswordEncoder wired for password hashing?",
+    "ground_truth_answer": "BCryptPasswordEncoder bean is defined in a @Configuration class (JacksonCustomizations / SecurityConfiguration) and injected into UserCommandService to hash passwords securely.",
+    "expected_entities": [
+      "BCryptPasswordEncoder",
+      "PasswordEncoder",
+      "@Bean",
+      "@Configuration",
+      "UserCommandService"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q18",
+    "category": "Type4_ConfigWiring",
+    "question": "How is WebMvcConfigurer configured for CORS cross-origin requests?",
+    "ground_truth_answer": "WebMvcConfigurer bean registers CorsRegistry allowing HTTP methods (GET, POST, PUT, DELETE, OPTIONS) and headers (Authorization, Content-Type) for cross-origin frontend clients.",
+    "expected_entities": [
+      "WebMvcConfigurer",
+      "CorsRegistry",
+      "addCorsMappings",
+      "allowedOrigins",
+      "allowedMethods"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q19",
+    "category": "Type4_ConfigWiring",
+    "question": "How are MyBatis XML mapper files and database schemas wired?",
+    "ground_truth_answer": "MyBatis mapper XML files under resources/mapper/ map SQL queries to Java repository interfaces via @MapperScan configuration.",
+    "expected_entities": [
+      "@MapperScan",
+      "MyBatis",
+      "SqlSessionFactory",
+      "resources/mapper",
+      "XML"
+    ]
+  },
+  {
+    "id": "REALWORLD_Q20",
+    "category": "Type4_ConfigWiring",
+    "question": "How are environment configuration properties (JWT secret, expiration time) externalized in application.properties?",
+    "ground_truth_answer": "JWT parameters (jwt.secret, jwt.sessionTime) are declared in application.properties and bound to Java fields via @Value(\"${jwt.secret}\") or @ConfigurationProperties in JwtConfiguration.",
+    "expected_entities": [
+      "application.properties",
+      "@Value",
+      "@ConfigurationProperties",
+      "jwt.secret",
+      "jwt.sessionTime"
+    ]
+  }
+]
