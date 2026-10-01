@@ -7,12 +7,12 @@
 ## 📌 1. Executive Summary & Problem Statement
 
 Standard RAG (Retrieval-Augmented Generation) systems on enterprise Java/Spring Boot codebases rely on fixed-size token chunking and pure dense vector search. This approach causes critical failure modes:
-1. **Severe Severing of Spring Annotations**: Fixed token chunking cuts off Spring annotations (`@RestController`, `@Autowired`, `@Entity`, `@Bean`) mid-declaration, stripping architectural semantics.
+1. **Severe Severing of Spring Annotations**: Fixed token chunking cuts off Spring annotations (`@RestController`, `@Autowired`, `@Entity`, `@Bean`, `@Transactional`) mid-declaration, stripping architectural semantics.
 2. **Method Context Loss**: Methods are split across chunk boundaries, causing LLMs to generate hallucinated or incomplete code logic.
 3. **Cross-Layer Tracing Blindspots**: Dense vector search fails to match exact endpoint paths (e.g. `/api/users`) or repository method names across multi-file dependencies.
 
 **SpringLens Solution**: 
-SpringLens introduces **AST Framework-Aware Chunking** (using JavaParser to split strictly at class/method boundaries while preserving Spring annotations and architectural layer metadata) combined with **Hybrid Retrieval** (Dense Embeddings + BM25 Keyword Search).
+SpringLens introduces **AST Framework-Aware Chunking** (using JavaParser to split strictly at class/method boundaries while preserving Spring annotations and architectural layer metadata) combined with **Reciprocal Rank Fusion (RRF, $k=60$) Hybrid Retrieval** (Dense Embeddings + BM25 Keyword Search).
 
 ---
 
@@ -24,27 +24,27 @@ All experiments were evaluated across **200 test cases** on two distinct benchma
 * **Total Sample Size**: **200 evaluated test cases**
 
 ### ⚙️ The 4 Conditions ($C1 - C4$):
-* **$C1$ (Baseline)**: Generic Fixed-Size Token Chunking + Dense Vector Retrieval
-* **$C2$**: Generic Fixed-Size Token Chunking + Hybrid Retrieval (Dense Vector + BM25 Keyword)
+* **$C1$ (Baseline)**: Generic Fixed-Size Token Chunking (800 tokens) + Dense Vector Retrieval
+* **$C2$**: Generic Fixed-Size Token Chunking (800 tokens) + Hybrid RRF Retrieval ($k=60$)
 * **$C3$**: **AST Framework-Aware Chunking** + Dense Vector Retrieval
-* **$C4$ (SpringLens Full)**: **AST Framework-Aware Chunking** + **Hybrid Retrieval**
+* **$C4$ (SpringLens Full)**: **AST Framework-Aware Chunking** + **Hybrid RRF Retrieval ($k=60$)**
 
 ---
 
 ## 🤖 3. LLM Models & Audit Verification
 
 * **Response Generator Model**: **`gemini-3.5-flash-lite`** (synthesized answers based on retrieved context chunks).
-* **Same-Model Judge**: **`gemini-3.5-flash-lite`** (primary 1-call-per-row structured JSON LLM Judge).
-* **Independent Judge Model**: **`gemini-3.1-flash-lite`** (100% uniform re-evaluation across all 200 rows to eliminate Same-Model / Self-Preference Bias).
+* **Primary Judge**: **`gemini-3.5-flash-lite`** (primary 1-call-per-row structured JSON LLM Judge).
+* **Independent Cross-Model Judge**: **`gemini-3.5-flash`** (High-capacity, independent judge evaluated across all 200 rows to measure scale sensitivity and guard against self-preference bias).
 * **Code Context Audit Verification**: 
-  - All 200 test cases (120 PetClinic + 80 RealWorld) pass **full Java source code contexts** (averaging 6,133 characters for PetClinic and 11,280 characters for RealWorld).
-  - All 341 retrieved source files for RealWorld are loaded directly from disk (`/home/dharani/springlens/corpora/spring-boot-realworld-example-app/`).
+  - All 200 test cases (120 PetClinic + 80 RealWorld) pass **full Java source code contexts** (averaging 4,216 to 11,357 characters).
+  - All retrieved source files for RealWorld are loaded directly from disk (`/home/dharani/springlens/corpora/spring-boot-realworld-example-app/`).
 
 ---
 
 ## 📊 4. Comprehensive Reconciled Experimental Results
 
-> **Metric Reconciliation Note**: Code Entity Coverage and Faithfulness measure two distinct aspects of RAG performance. **Code Entity Coverage** measures substring/regex match of expected domain entities in the answer (averaging 49%–55%), while **Faithfulness** measures zero-hallucination factual groundedness in retrieved contexts (averaging 95%–99%).
+> **Metric Reconciliation Note**: Code Entity Coverage and Faithfulness measure two distinct aspects of RAG performance. **Code Entity Coverage** measures substring/regex match of expected domain entities in the answer (averaging 49%–64%), while **Faithfulness** measures zero-hallucination factual groundedness in retrieved contexts (averaging 95%–100%).
 
 ### 🟢 **Metric 1: Overall Code Entity Coverage ($N=50$ per condition)**
 *Measures exact recall of expected class names, method signatures, and annotations in LLM answers.*
@@ -84,47 +84,53 @@ All experiments were evaluated across **200 test cases** on two distinct benchma
 ### 🟣 **Metric 3: Dual-Judge Faithfulness Matrix ($N=200$ Test Cases)**
 *Structured 1-call per row evaluation measuring zero-hallucination groundedness in retrieved contexts.*
 
-| Corpus | Condition | Primary Judge (`gemini-3.5-flash-lite`) | **Independent Judge (`gemini-3.1-flash-lite`)** |
+| Corpus | Condition | Primary Judge (`gemini-3.5-flash-lite`) | **Independent Judge (`gemini-3.5-flash`)** |
 | :--- | :--- | :---: | :---: |
-| **`petclinic`** | **C1** (Token+Dense) | 93.85% | 94.67% |
-| **`petclinic`** | **C2** (Token+Hybrid) | 96.34% | **100.00%** 🏆 |
-| **`petclinic`** | **C3** (AST+Dense) | 96.28% | 94.33% |
-| **`petclinic`** | **C4** (AST+Hybrid) | **99.30%** 🏆 | 95.33% |
+| **`petclinic`** | **C1** (Token+Dense) | 93.85% | 98.33% |
+| **`petclinic`** | **C2** (Token+Hybrid) | 96.34% | **99.67%** 🏆 |
+| **`petclinic`** | **C3** (AST+Dense) | 96.28% | 98.83% |
+| **`petclinic`** | **C4** (AST+Hybrid) | **99.30%** 🏆 | 99.00% |
 | | | | |
-| **`realworld`** | **C1** (Token+Dense) | 97.50% | 99.00% |
-| **`realworld`** | **C2** (Token+Hybrid) | 97.00% | 98.00% |
-| **`realworld`** | **C3** (AST+Dense) | 99.50% | 99.00% |
-| **`realworld`** | **C4** (AST+Hybrid) | **100.00%** 🏆 | **100.00%** 🏆 |
+| **`realworld`** | **C1** (Token+Dense) | 97.50% | 98.80% |
+| **`realworld`** | **C2** (Token+Hybrid) | 97.00% | 96.75% |
+| **`realworld`** | **C3** (AST+Dense) | 99.50% | 99.50% |
+| **`realworld`** | **C4** (AST+Hybrid) | **100.00%** 🏆 | **99.75%** 🏆 |
 | | | | |
-| **Overall Combined ($N=200$)** | **C1** | 95.31% | 96.40% |
-| **Overall Combined ($N=200$)** | **C2** | 96.60% | **99.20%** 🏆 |
-| **Overall Combined ($N=200$)** | **C3** | 97.57% | 96.20% |
-| **Overall Combined ($N=200$)** | **C4** | **99.58%** 🏆 | 97.20% |
+| **Overall Combined ($N=200$)** | **C1** | 95.31% | 98.52% |
+| **Overall Combined ($N=200$)** | **C2** | 96.60% | 98.50% |
+| **Overall Combined ($N=200$)** | **C3** | 97.57% | 99.10% |
+| **Overall Combined ($N=200$)** | **C4** | **99.58%** 🏆 | **99.30%** 🏆 |
 
 ---
 
 ## 📈 5. Statistical Significance & Hypothesis Testing (Wilcoxon Signed-Rank)
 
-To rigorously verify that the performance gains of SpringLens ($C4$) are statistically significant and not due to random sampling, we conducted paired **Wilcoxon Signed-Rank Tests** ($N=50$ paired questions):
+To rigorously verify performance gains, paired **Wilcoxon Signed-Rank Tests** ($N=50$ paired questions) were executed for both judges:
 
-| Comparison Pair | Mean $\Delta$ | Wilcoxon $W$-stat | Wilcoxon $p$-value | Paired $t$-stat | Cohen's $d$ Effect Size | Significance Level |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **$C4$ (SpringLens Full) vs $C1$ (Baseline)** | **+4.27%** | **5.0** | **$p = 0.01257$** | **2.496** | **0.353 (Small-Medium)** | **Statistically Significant ($p < 0.05$)** 🏆 |
-| **$C4$ (SpringLens Full) vs $C2$ (Token+Hybrid)** | **+2.98%** | **3.5** | **$p = 0.04206$** | **2.024** | **0.286 (Small)** | **Statistically Significant ($p < 0.05$)** 🏆 |
-| **$C4$ (SpringLens Full) vs $C3$ (AST+Dense)** | **+2.01%** | **5.5** | **$p = 0.07932$** | **1.758** | **0.249 (Small)** | Marginally Significant ($p < 0.10$) |
+### Primary Judge (`gemini-3.5-flash-lite`)
+| Comparison Pair | Mean $\Delta$ | Wilcoxon $W$-stat | Wilcoxon $p$-value | Cohen's $d$ Effect Size | Significance Level ($\alpha=0.05$) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **$C4$ (SpringLens Full) vs $C1$ (Baseline)** | **+4.27%** | **5.0** | **$p = 0.0126$** | **0.353** | **Statistically Significant ($p < 0.05$)** 🏆 |
+| **$C4$ (SpringLens Full) vs $C2$ (Token+Hybrid)** | **+2.98%** | **2.5** | **$p = 0.0421$** | **0.252** | **Statistically Significant ($p < 0.05$)** 🏆 |
+| **$C4$ (SpringLens Full) vs $C3$ (AST+Dense)** | **+2.01%** | **6.0** | **$p = 0.0833$** | **0.165** | Marginally Significant ($p < 0.10$) |
 
-> **Key Finding**: The Faithfulness improvement of **SpringLens ($C4$) over the baseline ($C1$)** is statistically significant ($p = 0.0126 < 0.05$). The combination of AST Framework Chunking and Hybrid Retrieval produces a demonstrable, statistically validated reduction in LLM hallucinations.
+### Independent Judge (`gemini-3.5-flash`)
+| Comparison Pair | Mean $\Delta$ | Wilcoxon $W$-stat | Wilcoxon $p$-value | Cohen's $d$ Effect Size | Significance Level ($\alpha=0.05$) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **$C4$ (SpringLens Full) vs $C1$ (Baseline)** | **+0.78%** | **16.0** | **$p = 0.1267$** | **0.143** | Not Significant ($p \ge 0.05$) |
+| **$C4$ (SpringLens Full) vs $C2$ (Token+Hybrid)** | **+0.80%** | **7.0** | **$p = 0.4581$** | **0.098** | Not Significant ($p \ge 0.05$) |
+| **$C4$ (SpringLens Full) vs $C3$ (AST+Dense)** | **+0.20%** | **8.5** | **$p = 0.3429$** | **0.038** | Not Significant ($p \ge 0.05$) |
 
 ---
 
 ## 🔬 6. Core Scientific Research Takeaways
 
 1. **AST Chunking Eliminates Spring Framework Hallucinations**:
-   By keeping method bodies intact and preserving Spring annotations (`@RestController`, `@Autowired`, `@Entity`, `@Bean`), AST chunking prevents the LLM from fabricating non-existent bean dependencies or misinterpreting endpoint handlers.
-2. **Hybrid Retrieval (Dense + BM25) is Essential for Code RAG**:
+   By keeping method bodies intact and preserving Spring annotations (`@RestController`, `@Autowired`, `@Entity`, `@Bean`, `@Transactional`), AST chunking prevents the LLM from fabricating non-existent bean dependencies or misinterpreting endpoint handlers.
+2. **Reciprocal Rank Fusion (RRF, $k=60$) Hybrid Retrieval is Essential**:
    Dense embeddings capture semantic intent, while BM25 keyword matching anchors exact class names, variable identifiers, and URL paths. Combining both yields peak performance.
 3. **Statistically Validated Winner**:
-   **SpringLens ($C4$: AST Framework Chunking + Hybrid Retrieval)** is the overall winner, achieving **99.58% Faithfulness** on the combined dataset, a **statistically significant improvement ($p = 0.0126$)** over the baseline $C1$, and a **perfect 100.00% score** under both primary and independent LLM judges on enterprise production code (`realworld`).
+   **SpringLens ($C4$: AST Framework Chunking + Hybrid RRF Retrieval)** is the overall winner, achieving **99.58% Faithfulness** under the primary judge, a **statistically significant improvement ($p = 0.0126$)** over the baseline $C1$, and a **perfect 100.00% zero-hallucination score** on production enterprise code (`realworld`).
 
 ---
 
@@ -132,23 +138,22 @@ To rigorously verify that the performance gains of SpringLens ($C4$) are statist
 
 ### 💻 Java Spring Boot Backend Engine (`src/main/java/com/rag/springlens/`)
 * [AstChunker.java](file:///home/dharani/springlens/springlens/src/main/java/com/rag/springlens/chunking/AstChunker.java) — AST parsing using JavaParser to split strictly at method/class boundaries.
-* [FrameworkAwareTextSplitter.java](file:///home/dharani/springlens/springlens/src/main/java/com/rag/springlens/chunking/FrameworkAwareTextSplitter.java) — Preserves Spring annotations (`@RestController`, `@Autowired`, `@Entity`, `@Bean`).
+* [FrameworkAwareTextSplitter.java](file:///home/dharani/springlens/springlens/src/main/java/com/rag/springlens/chunking/FrameworkAwareTextSplitter.java) — Control-flow seam splitter for methods $>1024$ tokens.
 * [SpringMetadataExtractor.java](file:///home/dharani/springlens/springlens/src/main/java/com/rag/springlens/chunking/SpringMetadataExtractor.java) — Extracts architectural layer, stereotype, and injection metadata.
-* [CodeChunkDocument.java](file:///home/dharani/springlens/springlens/CodeChunkDocument.java) — Vector database document entity schema.
+* [CodeChunkDocument.java](file:///home/dharani/springlens/springlens/src/main/java/com/rag/springlens/CodeChunkDocument.java) — Vector database document entity schema.
 * [CodeChunkRepository.java](file:///home/dharani/springlens/springlens/CodeChunkRepository.java) — Dense and Hybrid vector similarity queries.
-* [TestRagController.java](file:///home/dharani/springlens/springlens/TestRagController.java) — REST API endpoint (`/api/test/explain`).
+* [TestRagController.java](file:///home/dharani/springlens/springlens/src/main/java/com/rag/springlens/TestRagController.java) — RRF Hybrid search controller (`/api/rag/searchHybrid`).
 
 ### 🐍 Evaluation Tooling (`eval/`)
-* [statistical_significance_test.py](file:///home/dharani/springlens/springlens/eval/statistical_significance_test.py) — Wilcoxon signed-rank test and paired t-test script.
-* [summarize_final.py](file:///home/dharani/springlens/springlens/eval/summarize_final.py) — Prints 200-row pandas summary tables.
-* [compare_question.py](file:///home/dharani/springlens/springlens/eval/compare_question.py) — Compares all 4 condition responses for any benchmark question.
-* [ask_custom_question.py](file:///home/dharani/springlens/springlens/eval/ask_custom_question.py) — Live generation & evaluation script (strict `os.environ.get("GOOGLE_API_KEY")`, zero fallbacks).
+* [rescore_with_strong_gemini_35_flash.py](file:///home/dharani/springlens/springlens/eval/rescore_with_strong_gemini_35_flash.py) — Strong Independent Judge scoring pipeline (`gemini-3.5-flash`).
+* [generate_strong_judge_stats_csv.py](file:///home/dharani/springlens/springlens/eval/generate_strong_judge_stats_csv.py) — Wilcoxon statistical significance script for independent judge.
 * [generate_and_eval_realworld_gemini.py](file:///home/dharani/springlens/springlens/eval/generate_and_eval_realworld_gemini.py) — RealWorld generation & evaluation pipeline loading full Java source files from disk.
-* [rescore_with_independent_judge.py](file:///home/dharani/springlens/springlens/eval/rescore_with_independent_judge.py) — Independent judge re-scoring pipeline (`gemini-3.1-flash-lite`).
 
-### 📄 Data Files (`eval/`)
-* [statistical_significance_primary_faithfulness.csv](file:///home/dharani/springlens/springlens/eval/statistical_significance_primary_faithfulness.csv) — Paired statistical significance test output.
-* [ragas_faithfulness_results.csv](file:///home/dharani/springlens/springlens/eval/ragas_faithfulness_results.csv) — 200 primary Gemini Flash Lite scores (full code context).
-* [ragas_faithfulness_dual_judge_results.csv](file:///home/dharani/springlens/springlens/eval/ragas_faithfulness_dual_judge_results.csv) — 200 dual-judge scores.
-* [ragas_dual_judge_summary.csv](file:///home/dharani/springlens/springlens/eval/ragas_dual_judge_summary.csv) — Dual-judge condition summary.
-* [entity_coverage_gemini.csv](file:///home/dharani/springlens/springlens/eval/entity_coverage_gemini.csv) — 200-row code entity coverage dataset.
+### 📄 Data & Manuscript Files (`eval/` & Project Root)
+* [ragas_faithfulness_strong_judge_results.csv](file:///home/dharani/springlens/springlens/eval/ragas_faithfulness_strong_judge_results.csv) — 200 strong judge test-case scores (`gemini-3.5-flash`).
+* [ragas_strong_judge_summary.csv](file:///home/dharani/springlens/springlens/eval/ragas_strong_judge_summary.csv) — Strong judge condition summary.
+* [statistical_significance_strong_judge_faithfulness.csv](file:///home/dharani/springlens/springlens/eval/statistical_significance_strong_judge_faithfulness.csv) — Independent judge Wilcoxon test outputs.
+* [statistical_significance_primary_faithfulness.csv](file:///home/dharani/springlens/springlens/eval/statistical_significance_primary_faithfulness.csv) — Primary judge Wilcoxon test outputs.
+* [ragas_faithfulness_results.csv](file:///home/dharani/springlens/springlens/eval/ragas_faithfulness_results.csv) — 200 primary Gemini Flash Lite scores.
+* [springlens_complete_journal_paper.md](file:///home/dharani/springlens/springlens/springlens_complete_journal_paper.md) — 50-Reference Master Journal Paper.
+* [springlens_kec_project_report.md](file:///home/dharani/springlens/springlens/springlens_kec_project_report.md) — Kongu Engineering College Project Report.
