@@ -156,4 +156,4 @@ To rigorously verify performance gains, paired **Wilcoxon Signed-Rank Tests** ($
 * [statistical_significance_primary_faithfulness.csv](file:///home/dharani/springlens/springlens/eval/statistical_significance_primary_faithfulness.csv) — Primary judge Wilcoxon test outputs.
 * [ragas_faithfulness_results.csv](file:///home/dharani/springlens/springlens/eval/ragas_faithfulness_results.csv) — 200 primary Gemini Flash Lite scores.
 * [springlens_complete_journal_paper.md](file:///home/dharani/springlens/springlens/springlens_complete_journal_paper.md) — 50-Reference Master Journal Paper.
-* [springlens_kec_project_report.md](file:///home/dharani/springlens/springlens/springlens_kec_project_report.md) — Kongu Engineering College Project Report.
+
